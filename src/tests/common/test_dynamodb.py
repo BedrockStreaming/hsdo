@@ -8,20 +8,20 @@ class TestDynamoDB(unittest.TestCase):
     
     def testFillServer(self):
         item={
-            "ServerName": "i-009249e852ef68dfe",
+            "ServerName": "i-054512545121",
             "BackendServerStatus": "enabled",
-            "ASG": "usp-origin-eu-west-1b-rtlmutu",
+            "ASG": "ASG1",
             "Weight": 10,
-            "IPAddress": "10.17.10.189",
+            "IPAddress": "10.0.0.1",
             "LastWeightUpdate": "2020-11-12 17:29:08.597604",
             "BackendServerID": 1
         }
         dynamodb = DynamoDB()
         server = dynamodb.fillServer(item)
         self.assertEqual(server.backendServerID, 1)
-        self.assertEqual(server.serverName, "i-009249e852ef68dfe")
-        self.assertEqual(server.IPAddress, "10.17.10.189")
-        self.assertEqual(server.ASG , "usp-origin-eu-west-1b-rtlmutu")        
+        self.assertEqual(server.serverName, "i-054512545121")
+        self.assertEqual(server.IPAddress, "10.0.0.1")
+        self.assertEqual(server.ASG , "ASG1")        
         self.assertEqual(server.weight, 10)
         self.assertEqual(server.backendServerStatus, "enabled")
         self.assertEqual(server.lastWeightUpdate, "2020-11-12 17:29:08.597604")

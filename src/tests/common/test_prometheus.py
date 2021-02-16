@@ -12,9 +12,9 @@ class TestPrometheus(unittest.TestCase):
 
         server = ServerModel()
         server.backendServerID = 1
-        server.serverName = "i-009249e852ef68dfe"
-        server.IPAddress = "10.17.10.189"
-        server.ASG = "usp-origin-eu-west-1b-rtlmutu"    
+        server.serverName = "i-5165165131312"
+        server.IPAddress = "10.0.0.1"
+        server.ASG = "ASG1"    
         server.weight = 10
         server.backendServerStatus = "enabled"
         server.lastWeightUpdate = "2020-11-12 17:29:08.597604"
