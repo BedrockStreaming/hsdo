@@ -56,13 +56,13 @@ Configuration that is specific to HSDO Server.
 
 `SERVER_CONSUL_SERVICE_NAME`: Consul service name where to find your target servers. May be a list, separated with comma. If `consul` mode enabled. Default to ` `.
 
-`SERVER_HAPROXY_BACKEND_SERVER_MIN_WEIGHT`: Default to `1`.
+`SERVER_HAPROXY_BACKEND_SERVER_MIN_WEIGHT`: Minimum weight of a newly added backend server. Default to `1`.
 
-`SERVER_HAPROXY_BACKEND_SERVER_MAX_WEIGHT`: Default to `10`.
+`SERVER_HAPROXY_BACKEND_SERVER_MAX_WEIGHT`: Maximum weight of a backend server. Default to `10`.
 
-`SERVER_HAPROXY_BACKEND_SERVER_INCREASE_WEIGHT`: Default to `1`.
+`SERVER_HAPROXY_BACKEND_SERVER_INCREASE_WEIGHT`: Defines the level of increase in the weight of the newly added servers. Every 'SERVER_HAPROXY_BACKEND_SERVER_INCREASE_WEIGHT_INTERVAL', the weight of a new server will be increased by this value. Default to `1`.
 
-`SERVER_HAPROXY_BACKEND_SERVER_INCREASE_WEIGHT_INTERVAL`: In seconds, time between each weight increasing. For example, if we want to increase weight from 1 to 10 every 30 seconds, we need to wait for 5min. Default to `30`.
+`SERVER_HAPROXY_BACKEND_SERVER_INCREASE_WEIGHT_INTERVAL`: In seconds, time between each weight increasing. For example, if we want a new server to have its target weight 5mns after it has been added to the backend, going from weight 1 to 10, we would use interval 30: 30s interval, 10 times between 1 and 10: 300secs. Default to `30`.
 
 `SERVER_MODE`: Can be `aws` or `consul`. Default to ` `. `consul` is higly experimental, it probably doesn't work. Only `aws` mode is prod ready.
 
