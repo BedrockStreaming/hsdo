@@ -62,7 +62,7 @@ Environment variables will overwrite `conf/env.yaml`.
 
 `CLIENT_ASG_NAMES`: List of names of ASG where servers are. May be a list, separated with comma. If `aws` mode enabled. Default to ` `.
 
-`HAPROXY_SOCKET_PATH`: HAProxy socket to use [Runtime API](https://cbonte.github.io/haproxy-dconv/2.0/management.html#9.3). Default to `/var/run/haproxy/admin.sock`.
+`HAPROXY_SOCKET_PATH`: HAProxy socket to use [Runtime API](https://cbonte.github.io/haproxy-dconv/2.2/management.html#9.3). Default to `/var/run/haproxy/admin.sock`.
 
 `HAPROXY_BACKEND_NAME`: HAProxy backend name. Default to ` `.
 
