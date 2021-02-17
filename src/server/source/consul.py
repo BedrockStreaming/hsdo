@@ -16,11 +16,11 @@ class Consul(SourceInterface):
     # Initialization
     ##
     def __init__(self):
-        self.url = Configuration().get("CONSUL_API_URL")
-        if "," in Configuration().get("CONSUL_SERVICE_NAME"):
-            self.service = Configuration().get("CONSUL_SERVICE_NAME").split(",")
+        self.url = Configuration().get("SERVER_CONSUL_API_URL")
+        if "," in Configuration().get("SERVER_CONSUL_SERVICE_NAME"):
+            self.service = Configuration().get("SERVER_CONSUL_SERVICE_NAME").split(",")
         else:
-            self.service = Configuration().get("CONSUL_SERVICE_NAME")
+            self.service = Configuration().get("SERVER_CONSUL_SERVICE_NAME")
         self.logger = Logger("HSDO.server.consul")
 
     ##

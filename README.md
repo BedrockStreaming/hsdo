@@ -79,8 +79,8 @@ Configuration that is specific to each HSDO Client, next to HAProxy.
 
 HAProxy default backend configuration can be seen in `haproxy.cfg`:
 ```
-backend {{ HAPROXY_BACKEND_NAME }}
-server-template  {{ HAPROXY_BACKEND_BASE_NAME }} 1-{{ HAPROXY_BACKEND_SERVERS_LIST_SIZE }} 127.0.0.2:{{ HAPROXY_BACKEND_SERVER_PORT }} check disabled
+backend {{ CLIENT_HAPROXY_BACKEND_NAME }}
+server-template  {{ CLIENT_HAPROXY_BACKEND_BASE_NAME }} 1-{{ HAPROXY_BACKEND_SERVERS_LIST_SIZE }} 127.0.0.2:{{ CLIENT_HAPROXY_BACKEND_SERVER_PORT }} check disabled
 ```
 
 For example, with :
@@ -94,17 +94,17 @@ You will have this kind of statistique page :
 
 ### Both
 
-`BOTH_INTERVAL`: Interval between each loop for client/server. Default to `1`.
+`INTERVAL`: Interval between each loop for client/server. Default to `1`.
 
-`BOTH_HAPROXY_BACKEND_SERVERS_LIST_SIZE`: As max range describe [here](https://cbonte.github.io/haproxy-dconv/2.0/configuration.html#4-server-template). Default to `10`.
+`HAPROXY_BACKEND_SERVERS_LIST_SIZE`: As max range describe [here](https://cbonte.github.io/haproxy-dconv/2.0/configuration.html#4-server-template). Default to `10`.
 
-`BOTH_DEBUG`: To enable debug log. Default to `false`.
+`DEBUG`: To enable debug log. Default to `false`.
 
-`BOTH_DYNAMODB_TABLE_NAME`: Name of dynamodb table. Default to ` `.
+`DYNAMODB_TABLE_NAME`: Name of dynamodb table. Default to ` `.
 
-`BOTH_AWS_DEFAULT_REGION`: default region needed for dynamodb access. Default to ` `.
+`AWS_DEFAULT_REGION`: default region needed for dynamodb access. Default to ` `.
 
-`BOTH_EXPORTER_PORT`: port for prometheus exporter. Default to `6789`
+`EXPORTER_PORT`: port for prometheus exporter. Default to `6789`
 
 ## Dedicated ASG Configuration (AWS Only)
 
@@ -116,11 +116,11 @@ This is possible if you enable `CLIENT_DEDICATED_ASG`.
 
 If the target's ASG name is in `CLIENT_ASG_NAMES`, then the target is put in default HAProxy backend.
 If the target's ASG name is not in `CLIENT_ASG_NAMES`, then the target is put in fallback HAProxy backend.
-If needed, ASG name in `CLIENT_ASG_NAMES` can alse be added in fallback HAProxy backend with `ALL_SERVERS_IN_FALLBACK_BACKEND` enabled.
+If needed, ASG name in `CLIENT_ASG_NAMES` can alse be added in fallback HAProxy backend with `CLIENT_ALL_SERVERS_IN_FALLBACK_BACKEND` enabled.
 
 ### Client only
 
-`CLIENT_DEDICATED_ASG`: HSDO Client will use `CLIENT_ASG_NAMES` to configure HAProxy instead of reading all ASGs from HSDO Server. If server ASG in not present in `CLIENT_ASG_NAMES`, it will be set in the fallback backend define in `HAPROXY_FALLBACK_BACKEND_NAME`. Default to `false`.
+`CLIENT_DEDICATED_ASG`: HSDO Client will use `CLIENT_ASG_NAMES` to configure HAProxy instead of reading all ASGs from HSDO Server. If server ASG in not present in `CLIENT_ASG_NAMES`, it will be set in the fallback backend define in `CLIENT_HAPROXY_FALLBACK_BACKEND_NAME`. Default to `false`.
 
 `CLIENT_ASG_NAMES`: List of ASG that HSDO Client is using to configure HAProxy. May be a list, separated with comma. Needed with `CLIENT_DEDICATED_ASG`. Default to ` `.
 

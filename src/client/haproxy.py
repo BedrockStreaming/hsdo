@@ -16,10 +16,10 @@ class HAProxy:
     def __init__(self):
         self.azLimiter = Configuration().get("AZ_LIMITER")
         self.optAllServersInFallback = Configuration().get("ALL_SERVERS_IN_FALLBACK_BACKEND")
-        self.socketPath = Configuration().get("HAPROXY_SOCKET_PATH")
-        self.backendName = Configuration().get("HAPROXY_BACKEND_NAME")
+        self.socketPath = Configuration().get("CLIENT_HAPROXY_SOCKET_PATH")
+        self.backendName = Configuration().get("CLIENT_HAPROXY_BACKEND_NAME")
         self.fallbackBackendName = Configuration().get("HAPROXY_FALLBACK_BACKEND_NAME")
-        self.backendBaseName = Configuration().get("HAPROXY_BACKEND_BASE_NAME")
+        self.backendBaseName = Configuration().get("CLIENT_HAPROXY_BACKEND_BASE_NAME")
         self.fallbackBackendBaseName = Configuration().get("HAPROXY_FALLBACK_BACKEND_BASE_NAME")
         self.ASG = Configuration().get("CLIENT_ASG_NAMES").split(",")
         self.logger = Logger("HSDO.client.haproxy")
@@ -32,7 +32,7 @@ class HAProxy:
 
     def sockConfExists(self):
         if not os.path.exists(self.socketPath):
-            return {"result": False, "message": "Socket %s not found, please set env var HAPROXY_SOCKET_PATH correctly" % self.socketPath}
+            return {"result": False, "message": "Socket %s not found, please set env var CLIENT_HAPROXY_SOCKET_PATH correctly" % self.socketPath}
         return {"result": True, "message": ""}
 
     def checkBackendConf(self):
@@ -59,7 +59,7 @@ class HAProxy:
         message = ""
         if not backendExists:
             result = False
-            message = "Backend %s/%s not found, please set env HAPROXY_BACKEND_NAME and HAPROXY_BACKEND_BASE_NAME correctly\n" % (self.backendName,self.backendBaseName)
+            message = "Backend %s/%s not found, please set env CLIENT_HAPROXY_BACKEND_NAME and CLIENT_HAPROXY_BACKEND_BASE_NAME correctly\n" % (self.backendName,self.backendBaseName)
         if self.azLimiter == "true" and not fallbackBackendExists:
             result = False
             message += "Backend %s/%s not found, please set env HAPROXY_FALLBACK_BACKEND_NAME and HAPROXY_FALLBACK_BACKEND_BASE_NAME correctly" % (self.fallbackBackendName, self.fallbackBackendBaseName)
@@ -101,7 +101,7 @@ class HAProxy:
                     bckndName,
                     bckndbsName + str(server.backendServerID),
                     server.IPAddress,
-                    str(Configuration().get("HAPROXY_BACKEND_SERVER_PORT"),)
+                    str(Configuration().get("CLIENT_HAPROXY_BACKEND_SERVER_PORT"),)
                 )
             )
             commands.append(

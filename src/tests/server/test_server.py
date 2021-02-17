@@ -12,10 +12,10 @@ from common.prometheus import Prometheus
 class TestServer(unittest.TestCase):
 
     def testUpdateweight(self):
-        os.environ["HAPROXY_BACKEND_SERVER_MIN_WEIGHT"] = "1"
-        os.environ["HAPROXY_BACKEND_SERVER_MAX_WEIGHT"] = "10"
-        os.environ["HAPROXY_BACKEND_SERVER_INCREASE_WEIGHT_INTERVAL"] = "30"
-        os.environ["HAPROXY_BACKEND_SERVER_INCREASE_WEIGHT"] = "1"
+        os.environ["SERVER_HAPROXY_BACKEND_SERVER_MIN_WEIGHT"] = "1"
+        os.environ["SERVER_HAPROXY_BACKEND_SERVER_MAX_WEIGHT"] = "10"
+        os.environ["SERVER_HAPROXY_BACKEND_SERVER_INCREASE_WEIGHT_INTERVAL"] = "30"
+        os.environ["SERVER_HAPROXY_BACKEND_SERVER_INCREASE_WEIGHT"] = "1"
         Configuration()
         s = ServerModel()
         s.lastWeightUpdate = datetime.now().isoformat()
@@ -30,10 +30,10 @@ class TestServer(unittest.TestCase):
         self.assertEqual(servers[0].weight, 2)
 
     def testAddServer(self):
-        os.environ["HAPROXY_BACKEND_SERVER_MIN_WEIGHT"] = "1"
-        os.environ["HAPROXY_BACKEND_SERVER_MAX_WEIGHT"] = "10"
-        os.environ["HAPROXY_BACKEND_SERVER_INCREASE_WEIGHT_INTERVAL"] = "30"
-        os.environ["HAPROXY_BACKEND_SERVER_INCREASE_WEIGHT"] = "1"
+        os.environ["SERVER_HAPROXY_BACKEND_SERVER_MIN_WEIGHT"] = "1"
+        os.environ["SERVER_HAPROXY_BACKEND_SERVER_MAX_WEIGHT"] = "10"
+        os.environ["SERVER_HAPROXY_BACKEND_SERVER_INCREASE_WEIGHT_INTERVAL"] = "30"
+        os.environ["SERVER_HAPROXY_BACKEND_SERVER_INCREASE_WEIGHT"] = "1"
         Configuration()
 
         dynamodbServers = [] 
@@ -67,10 +67,10 @@ class TestServer(unittest.TestCase):
         self.assertEqual(dynamodbServers[4].IPAddress, "1.1.1.1")
 
     def testRemoveDoublonServers(self):
-        os.environ["HAPROXY_BACKEND_SERVER_MIN_WEIGHT"] = "1"
-        os.environ["HAPROXY_BACKEND_SERVER_MAX_WEIGHT"] = "10"
-        os.environ["HAPROXY_BACKEND_SERVER_INCREASE_WEIGHT_INTERVAL"] = "30"
-        os.environ["HAPROXY_BACKEND_SERVER_INCREASE_WEIGHT"] = "1"
+        os.environ["SERVER_HAPROXY_BACKEND_SERVER_MIN_WEIGHT"] = "1"
+        os.environ["SERVER_HAPROXY_BACKEND_SERVER_MAX_WEIGHT"] = "10"
+        os.environ["SERVER_HAPROXY_BACKEND_SERVER_INCREASE_WEIGHT_INTERVAL"] = "30"
+        os.environ["SERVER_HAPROXY_BACKEND_SERVER_INCREASE_WEIGHT"] = "1"
         Configuration()
 
         dynamodbServers = [] 
@@ -106,10 +106,10 @@ class TestServer(unittest.TestCase):
         self.assertEqual(sourceServersToAdd[0].IPAddress, "7.7.7.7")
 
     def testRemoveUnexistingServers(self):
-        os.environ["HAPROXY_BACKEND_SERVER_MIN_WEIGHT"] = "1"
-        os.environ["HAPROXY_BACKEND_SERVER_MAX_WEIGHT"] = "10"
-        os.environ["HAPROXY_BACKEND_SERVER_INCREASE_WEIGHT_INTERVAL"] = "30"
-        os.environ["HAPROXY_BACKEND_SERVER_INCREASE_WEIGHT"] = "1"
+        os.environ["SERVER_HAPROXY_BACKEND_SERVER_MIN_WEIGHT"] = "1"
+        os.environ["SERVER_HAPROXY_BACKEND_SERVER_MAX_WEIGHT"] = "10"
+        os.environ["SERVER_HAPROXY_BACKEND_SERVER_INCREASE_WEIGHT_INTERVAL"] = "30"
+        os.environ["SERVER_HAPROXY_BACKEND_SERVER_INCREASE_WEIGHT"] = "1"
         Configuration()
 
         dynamodbServers = [] 

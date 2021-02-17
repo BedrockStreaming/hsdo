@@ -12,7 +12,7 @@ class TestHAProxy(unittest.TestCase):
         """
         Test that check sock file is ok
         """
-        os.environ["HAPROXY_SOCKET_PATH"] = "/tmp/haproxy.sock"
+        os.environ["CLIENT_HAPROXY_SOCKET_PATH"] = "/tmp/haproxy.sock"
         Configuration()
         haproxy = HAProxy()
         self.assertFalse(haproxy.sockConfExists()["result"])
@@ -23,8 +23,8 @@ class TestHAProxy(unittest.TestCase):
         Test that check backend conf is ok
         """
         os.environ["AZ_LIMITER"] = "false"
-        os.environ["HAPROXY_BACKEND_NAME"] = "test"
-        os.environ["HAPROXY_BACKEND_BASE_NAME"] = "test"
+        os.environ["CLIENT_HAPROXY_BACKEND_NAME"] = "test"
+        os.environ["CLIENT_HAPROXY_BACKEND_BASE_NAME"] = "test"
         Configuration()
         haproxy = HAProxy()
         stat = "test,test1,0,0,0,0,,0,0,0,,0,,0,0,0,0,UP,10,1,0,0,1,330587,0,,1,4,2,,0,,2,0,,0,L4OK,,0,0,0,0,0,0,0,,,,,0,0,,,,,-1,,,0,0,0,0,,,,Layer4 check passed,,2,3,4,,,,10.14.34.198:80,,http,,,,,,,,0,0,0,,,0,,0,0,0,0,"
@@ -35,8 +35,8 @@ class TestHAProxy(unittest.TestCase):
         Test that check backend conf fallback is ok
         """
         os.environ["AZ_LIMITER"] = "true"
-        os.environ["HAPROXY_BACKEND_NAME"] = "test"
-        os.environ["HAPROXY_BACKEND_BASE_NAME"] = "test"
+        os.environ["CLIENT_HAPROXY_BACKEND_NAME"] = "test"
+        os.environ["CLIENT_HAPROXY_BACKEND_BASE_NAME"] = "test"
         os.environ["HAPROXY_FALLBACK_BACKEND_NAME"] = "test_b"
         os.environ["HAPROXY_FALLBACK_BACKEND_BASE_NAME"] = "test_b"
         Configuration()
@@ -50,34 +50,34 @@ class TestHAProxy(unittest.TestCase):
         Test that check backend conf if bad backend is ok
         """
         os.environ["AZ_LIMITER"] = "false"
-        os.environ["HAPROXY_BACKEND_NAME"] = "bad"
-        os.environ["HAPROXY_BACKEND_BASE_NAME"] = "test"
+        os.environ["CLIENT_HAPROXY_BACKEND_NAME"] = "bad"
+        os.environ["CLIENT_HAPROXY_BACKEND_BASE_NAME"] = "test"
         Configuration()
         haproxy = HAProxy()
         stat = "test,test1,0,0,0,0,,0,0,0,,0,,0,0,0,0,UP,10,1,0,0,1,330587,0,,1,4,2,,0,,2,0,,0,L4OK,,0,0,0,0,0,0,0,,,,,0,0,,,,,-1,,,0,0,0,0,,,,Layer4 check passed,,2,3,4,,,,10.14.34.198:80,,http,,,,,,,,0,0,0,,,0,,0,0,0,0,"
         self.assertFalse(haproxy.backendConfReady(stat)["result"])
-        self.assertEqual(haproxy.backendConfReady(stat)["message"], "Backend bad/test not found, please set env HAPROXY_BACKEND_NAME and HAPROXY_BACKEND_BASE_NAME correctly\n")
+        self.assertEqual(haproxy.backendConfReady(stat)["message"], "Backend bad/test not found, please set env CLIENT_HAPROXY_BACKEND_NAME and CLIENT_HAPROXY_BACKEND_BASE_NAME correctly\n")
 
     def testBackendConfReadyIfBadBackendBase(self):
         """
         Test that check backend conf if bad backend is ok
         """
         os.environ["AZ_LIMITER"] = "false"
-        os.environ["HAPROXY_BACKEND_NAME"] = "test"
-        os.environ["HAPROXY_BACKEND_BASE_NAME"] = "bad"
+        os.environ["CLIENT_HAPROXY_BACKEND_NAME"] = "test"
+        os.environ["CLIENT_HAPROXY_BACKEND_BASE_NAME"] = "bad"
         Configuration()
         haproxy = HAProxy()
         stat = "test,test1,0,0,0,0,,0,0,0,,0,,0,0,0,0,UP,10,1,0,0,1,330587,0,,1,4,2,,0,,2,0,,0,L4OK,,0,0,0,0,0,0,0,,,,,0,0,,,,,-1,,,0,0,0,0,,,,Layer4 check passed,,2,3,4,,,,10.14.34.198:80,,http,,,,,,,,0,0,0,,,0,,0,0,0,0,"
         self.assertFalse(haproxy.backendConfReady(stat)["result"])
-        self.assertEqual(haproxy.backendConfReady(stat)["message"], "Backend test/bad not found, please set env HAPROXY_BACKEND_NAME and HAPROXY_BACKEND_BASE_NAME correctly\n")
+        self.assertEqual(haproxy.backendConfReady(stat)["message"], "Backend test/bad not found, please set env CLIENT_HAPROXY_BACKEND_NAME and CLIENT_HAPROXY_BACKEND_BASE_NAME correctly\n")
 
     def testBackendConfReadyIfBadFallbackBackend(self):
         """
         Test that check backend conf if bad falback is ok
         """
         os.environ["AZ_LIMITER"] = "true"
-        os.environ["HAPROXY_BACKEND_NAME"] = "test"
-        os.environ["HAPROXY_BACKEND_BASE_NAME"] = "test"
+        os.environ["CLIENT_HAPROXY_BACKEND_NAME"] = "test"
+        os.environ["CLIENT_HAPROXY_BACKEND_BASE_NAME"] = "test"
         os.environ["HAPROXY_FALLBACK_BACKEND_NAME"] = "bad"
         os.environ["HAPROXY_FALLBACK_BACKEND_BASE_NAME"] = "test_b"
         Configuration()
@@ -92,8 +92,8 @@ class TestHAProxy(unittest.TestCase):
         Test that check backend conf if bad fallback is ok
         """
         os.environ["AZ_LIMITER"] = "true"
-        os.environ["HAPROXY_BACKEND_NAME"] = "test"
-        os.environ["HAPROXY_BACKEND_BASE_NAME"] = "test"
+        os.environ["CLIENT_HAPROXY_BACKEND_NAME"] = "test"
+        os.environ["CLIENT_HAPROXY_BACKEND_BASE_NAME"] = "test"
         os.environ["HAPROXY_FALLBACK_BACKEND_NAME"] = "test_b"
         os.environ["HAPROXY_FALLBACK_BACKEND_BASE_NAME"] = "bad"
         Configuration()
@@ -125,8 +125,8 @@ class TestHAProxy(unittest.TestCase):
         Test that prepare disabled server is ok
         """
         os.environ["AZ_LIMITER"] = "false"
-        os.environ["HAPROXY_BACKEND_NAME"] = "test"
-        os.environ["HAPROXY_BACKEND_BASE_NAME"] = "test"
+        os.environ["CLIENT_HAPROXY_BACKEND_NAME"] = "test"
+        os.environ["CLIENT_HAPROXY_BACKEND_BASE_NAME"] = "test"
         Configuration()
         haproxy = HAProxy()
         server = ServerModel()
@@ -142,9 +142,9 @@ class TestHAProxy(unittest.TestCase):
         Test that prepare enabled server is ok
         """
         os.environ["AZ_LIMITER"] = "false"
-        os.environ["HAPROXY_BACKEND_NAME"] = "test"
-        os.environ["HAPROXY_BACKEND_BASE_NAME"] = "test"
-        os.environ["HAPROXY_BACKEND_SERVER_PORT"] = "8765"
+        os.environ["CLIENT_HAPROXY_BACKEND_NAME"] = "test"
+        os.environ["CLIENT_HAPROXY_BACKEND_BASE_NAME"] = "test"
+        os.environ["CLIENT_HAPROXY_BACKEND_SERVER_PORT"] = "8765"
         Configuration()
         haproxy = HAProxy()
         server = ServerModel()
@@ -166,9 +166,9 @@ class TestHAProxy(unittest.TestCase):
         Test that prepare fallback enabled server is ok
         """
         os.environ["AZ_LIMITER"] = "true"
-        os.environ["HAPROXY_BACKEND_NAME"] = "test"
-        os.environ["HAPROXY_BACKEND_BASE_NAME"] = "test"
-        os.environ["HAPROXY_BACKEND_SERVER_PORT"] = "8765"
+        os.environ["CLIENT_HAPROXY_BACKEND_NAME"] = "test"
+        os.environ["CLIENT_HAPROXY_BACKEND_BASE_NAME"] = "test"
+        os.environ["CLIENT_HAPROXY_BACKEND_SERVER_PORT"] = "8765"
         Configuration()
         haproxy = HAProxy()
         server = ServerModel()

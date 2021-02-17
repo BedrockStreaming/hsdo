@@ -28,10 +28,10 @@ class Server(threading.Thread):
         self.source = None
         self.dynamodb = DynamoDB()
         self.backendListSize = Configuration().get("HAPROXY_BACKEND_SERVERS_LIST_SIZE")
-        self.minWeight = int(Configuration().get("HAPROXY_BACKEND_SERVER_MIN_WEIGHT"))
-        self.maxWeight = int(Configuration().get("HAPROXY_BACKEND_SERVER_MAX_WEIGHT"))
-        self.increaseWeight = int(Configuration().get("HAPROXY_BACKEND_SERVER_INCREASE_WEIGHT"))
-        self.increaseWeightInterval = int(Configuration().get("HAPROXY_BACKEND_SERVER_INCREASE_WEIGHT_INTERVAL"))
+        self.minWeight = int(Configuration().get("SERVER_HAPROXY_BACKEND_SERVER_MIN_WEIGHT"))
+        self.maxWeight = int(Configuration().get("SERVER_HAPROXY_BACKEND_SERVER_MAX_WEIGHT"))
+        self.increaseWeight = int(Configuration().get("SERVER_HAPROXY_BACKEND_SERVER_INCREASE_WEIGHT"))
+        self.increaseWeightInterval = int(Configuration().get("SERVER_HAPROXY_BACKEND_SERVER_INCREASE_WEIGHT_INTERVAL"))
 
     def run(self):
         self.dynamodb.checkTableReady()
