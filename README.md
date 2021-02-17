@@ -125,7 +125,7 @@ HSDO Client can be configured to follow specific ASGs that are present in `SERVE
 
 For example, if `SERVER_ASG_NAMES` contains `ASG1,ASG2,ASG3`, `CLIENT_ASG_NAMES` may follow `ASG2`. 
 
-This is usefull if you want to split traffic per AZ for example.
+This is usefull if you want to split traffic per AZ.
 
 ![Dedicated ASG Implementation Example](doc/HSDO_AZ_Limiter.png)
 
