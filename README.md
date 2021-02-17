@@ -101,7 +101,7 @@ For example, with :
 backend http-back
 server-template mywebapp 1-10 127.0.0.2:80 check disabled
 ```
-You will have this kind of statistique page : 
+You will have this kind of statistic page : 
 
 ![](doc/backend-servers-list.png)
 
