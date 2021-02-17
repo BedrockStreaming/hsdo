@@ -10,7 +10,14 @@ Orchestrate Service Discovery for HAProxy
 
 ## Why HSDO
 
-HSDO allow to use HAProxy in AWS when LoadBalancer capabilities are insufficient to your needs. HSDO implements ordered backend server lists to use fonctionnalities as consistent hashing.
+AWS load balancers don't allow algorithms different from round robin.
+HSDO allows to use HAProxy in front of one or multiple AutoScalingGroups on AWS.
+HSDO implements ordered backend servers lists to use functionalities like consistent hashing, which makes it possible to use all the power of HAProxy, but on AWS.
+
+By design, HSDO is able to run several HAProxy instances, to load balance from ten to hundreds of backend servers and separate traffic depending of AvailabilityZone.
+It is reliable and fault tolerant, as each HAProxy server updates its configuration asynchronously from a DynamoDB table.
+
+We wanted a very simple and efficient implementation for HSDO, which we didn't find in Consul.
 
 ## Prerequisities
 
