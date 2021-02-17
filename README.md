@@ -153,7 +153,7 @@ Fallback from default HAProxy backend to fallback HAProxy backend are not handle
 
 ## DynamoDB
 
-What dynamodb table should look like :
+What dynamodb table should look like (terraform code):
 
 ```
 resource "aws_dynamodb_table" "haproxy_service_discovery_orchestrator_table" {
