@@ -4,7 +4,7 @@ Orchestrate Service Discovery for HAProxy
 - ASG or Consul is listing available servers
 - HAProxy SDO Server gets servers from ASG, sort them, and save them in DynamoDB
 - HAproxy SDO Clients get sorted servers from DynamoDB and send configuration to HAProxy Runtime API
-- HAProxy server have all same configuration
+- All HAProxy instances have the same configuration
 
 ![HSDO Simple](doc/hsdo-simple.png)
 
