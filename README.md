@@ -1,9 +1,13 @@
 # haproxy-service-discovery-orchestrator
-Orchestrate Service Discovery for HAProxy
+Orchestrate Service Discovery for HAProxy.
 
 We are currently using HSDO to load-balance our VOD traffic, between CDNs and our origins.
+
 We have tested this platform with tens of HAProxy instances, reaching up to 200Gbps traffic.
+
 We are using Spot instances to run HAProxy with HSDO, using multiple AZs, but by optimizing traffic through AZ (because inter-AZ traffic is extremely expensive).
+
+We are currently running it along with HAProxy 2.2.
 
 - ASG or Consul is listing available servers
 - HAProxy SDO Server gets servers from ASG, sort them, and save them in DynamoDB
@@ -70,7 +74,7 @@ Configuration that is specific to HSDO Server.
 
 Configuration that is specific to each HSDO Client, next to HAProxy.
 
-`CLIENT_HAPROXY_SOCKET_PATH`: HAProxy socket to use [Runtime API](https://cbonte.github.io/haproxy-dconv/2.0/management.html#9.3). Default to `/var/run/haproxy/admin.sock`.
+`CLIENT_HAPROXY_SOCKET_PATH`: HAProxy socket to use [Runtime API](https://cbonte.github.io/haproxy-dconv/2.2/management.html#9.3). Default to `/var/run/haproxy/admin.sock`.
 
 `CLIENT_HAPROXY_BACKEND_NAME`: HAProxy default backend name. Default to ` `.
 
