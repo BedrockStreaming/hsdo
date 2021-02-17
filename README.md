@@ -22,6 +22,7 @@ We are currently running it along with HAProxy 2.2.
 - All HAProxy instances have the same configuration
 
 ![HSDO Simple](doc/hsdo-simple.png)
+We have one server, and as much clients as haproxy load balancers.
 
 ## Why HSDO
 
