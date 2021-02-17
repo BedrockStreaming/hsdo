@@ -46,7 +46,7 @@ Environment variables will overwrite `conf/env.yaml`.
 
 `CONSUL_API_URL`: Consul address where to find your target servers. If `consul` mode enabled. Default to ` `.
 
-`CONSUL_SERVICE_NAME`: Consul service name where to find your target servers. May be a list, separated with comma. If `consul` mode enabled. Default to ` `.
+`CONSUL_SERVICE_NAME`: Consul service name where to find target servers. May be a list, separated with comma. If `consul` mode enabled. Default to ` `.
 
 `HAPROXY_BACKEND_SERVER_MIN_WEIGHT`: Default to `1`.
 
