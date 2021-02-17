@@ -1,6 +1,10 @@
 # haproxy-service-discovery-orchestrator
 Orchestrate Service Discovery for HAProxy
 
+We are currently using HSDO to load-balance our VOD traffic, between CDNs and our origins.
+We have tested this platform with tens of HAProxy instances, reaching up to 200Gbps traffic.
+We are using Spot instances to run HAProxy with HSDO, using multiple AZs, but by optimizing traffic through AZ (because inter-AZ traffic is extremely expensive).
+
 - ASG or Consul is listing available servers
 - HAProxy SDO Server gets servers from ASG, sort them, and save them in DynamoDB
 - HAproxy SDO Clients get sorted servers from DynamoDB and send configuration to HAProxy Runtime API
