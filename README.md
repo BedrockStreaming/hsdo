@@ -15,7 +15,9 @@ We are using Spot instances to run HAProxy with HSDO, using multiple AZs, but by
 ## Why HSDO
 
 AWS load balancers don't allow algorithms different from round robin.
+
 HSDO allows to use HAProxy in front of one or multiple AutoScalingGroups on AWS.
+
 HSDO implements ordered backend servers lists to use functionalities like consistent hashing, which makes it possible to use all the power of HAProxy, but on AWS.
 
 By design, HSDO is able to run several HAProxy instances, to load balance from ten to hundreds of backend servers and separate traffic depending of AvailabilityZone.
@@ -43,7 +45,6 @@ python3 src/main.py --[client|server] (--[debug]) (--[help])
 
 Parameters can be defined through a config file or environment variables.
 Environment variables will overwrite `conf/env.yaml`.
-
 
 ### Server Only
 
@@ -109,26 +110,34 @@ You will have this kind of statistique page :
 ## Dedicated ASG Configuration (AWS Only)
 
 HSDO Client can be configured to follow specific ASGs that are present in `SERVER_ASG_NAMES`.
+
 For example, if `SERVER_ASG_NAMES` contains `ASG1,ASG2,ASG3`, `CLIENT_ASG_NAMES` may follow `ASG2`. 
+
 This is usefull if you want to split traffic per AZ for example.
+
+![Dedicated ASG Implementation Example](doc/HSDO_AZ_Limiter.png)
 
 This is possible if you enable `CLIENT_DEDICATED_ASG`.
 
 If the target's ASG name is in `CLIENT_ASG_NAMES`, then the target is put in default HAProxy backend.
+
 If the target's ASG name is not in `CLIENT_ASG_NAMES`, then the target is put in fallback HAProxy backend.
+
 If needed, ASG name in `CLIENT_ASG_NAMES` can alse be added in fallback HAProxy backend with `CLIENT_ALL_SERVERS_IN_FALLBACK_BACKEND` enabled.
+
+Fallback from default HAProxy backend to fallback HAProxy backend are not handled by HSDO Client.
 
 ### Client only
 
-`CLIENT_DEDICATED_ASG`: HSDO Client will use `CLIENT_ASG_NAMES` to configure HAProxy instead of reading all ASGs from HSDO Server. If server ASG in not present in `CLIENT_ASG_NAMES`, it will be set in the fallback backend define in `CLIENT_HAPROXY_FALLBACK_BACKEND_NAME`. Default to `false`.
+`CLIENT_DEDICATED_ASG`: HSDO Client will use `CLIENT_ASG_NAMES` to configure default HAProxy backend, and put the other ones in fallbackend HAProxy backend. Default to `false`.
 
-`CLIENT_ASG_NAMES`: List of ASG that HSDO Client is using to configure HAProxy. May be a list, separated with comma. Needed with `CLIENT_DEDICATED_ASG`. Default to ` `.
+`CLIENT_ASG_NAMES`: List of ASG that HSDO Client will use in default HAProxy backend. May be a list, separated with comma. Needed with `CLIENT_DEDICATED_ASG`. Default to ` `.
 
 `CLIENT_HAPROXY_FALLBACK_BACKEND_NAME`: HAProxy fallback backend name. Needed with `CLIENT_DEDICATED_ASG`. Default to ` `.
 
 `CLIENT_HAPROXY_FALLBACK_BACKEND_BASE_NAME`: HAProxy fallback backend base name for server template. Needed with `CLIENT_DEDICATED_ASG`. Default to ` `.
 
-`CLIENT_ALL_SERVERS_IN_FALLBACK_BACKEND`: to put also all default backend servers in the fallback backend. Default to `false`.
+`CLIENT_ALL_SERVERS_IN_FALLBACK_BACKEND`: to put also all default HAProxy backend servers in the fallback HAProxy backend. Default to `false`.
 
 ## DynamoDB
 
