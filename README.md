@@ -1,16 +1,27 @@
 # haproxy-service-discovery-orchestrator
 Orchestrate Service Discovery for HAProxy
 
+We are currently using HSDO to load-balance our VOD traffic, between CDNs and our origins.
+We have tested this platform with tens of HAProxy instances, reaching up to 200Gbps traffic.
+We are using Spot instances to run HAProxy with HSDO, using multiple AZs, but by optimizing traffic through AZ (because inter-AZ traffic is extremely expensive).
+
 - ASG or Consul is listing available servers
 - HAProxy SDO Server gets servers from ASG, sort them, and save them in DynamoDB
 - HAproxy SDO Clients get sorted servers from DynamoDB and send configuration to HAProxy Runtime API
-- HAProxy server have all same configuration
+- All HAProxy instances have the same configuration
 
 ![HSDO Simple](doc/hsdo-simple.png)
 
 ## Why HSDO
 
-HSDO allow to use HAProxy in AWS when LoadBalancer capabilities are insufficient to your needs. HSDO implements ordered backend server lists to use fonctionnalities as consistent hashing.
+AWS load balancers don't allow algorithms different from round robin.
+HSDO allows to use HAProxy in front of one or multiple AutoScalingGroups on AWS.
+HSDO implements ordered backend servers lists to use functionalities like consistent hashing, which makes it possible to use all the power of HAProxy, but on AWS.
+
+By design, HSDO is able to run several HAProxy instances, to load balance from ten to hundreds of backend servers and separate traffic depending of AvailabilityZone.
+It is reliable and fault tolerant, as each HAProxy server updates its configuration asynchronously from a DynamoDB table.
+
+We wanted a very simple and efficient implementation for HSDO, which we didn't find in Consul.
 
 ## Prerequisities
 
@@ -30,7 +41,7 @@ python3 src/main.py --[client|server] (--[debug]) (--[help])
 
 ## Configuration
 
-All configuration can be setted through file or environment variables.
+Parameters can be defined through a config file or environment variables.
 Environment variables will overwrite `conf/env.yaml`.
 
 
@@ -38,9 +49,9 @@ Environment variables will overwrite `conf/env.yaml`.
 
 Configuration that is specific to HSDO Server.
 
-`SERVER_ASG_NAMES`: List of names of ASG where to find your target servers. May be a list, separated with comma. If `aws` mode enabled. Default to ` `.
+`SERVER_ASG_NAMES`: List of ASG names where to find target servers (EC2 instances for which HAProxy will load balance traffic). May be a list, separated with comma. If `aws` mode enabled. Default to ` `.
 
-`SERVER_CONSUL_API_URL`: Consul Address where to find your target servers. If `consul` mode enabled. Default to ` `.
+`SERVER_CONSUL_API_URL`: Consul address where to find your target servers. If `consul` mode enabled. Default to ` `.
 
 `SERVER_CONSUL_SERVICE_NAME`: Consul service name where to find your target servers. May be a list, separated with comma. If `consul` mode enabled. Default to ` `.
 
