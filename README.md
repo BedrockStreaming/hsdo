@@ -44,7 +44,7 @@ Environment variables will overwrite `conf/env.yaml`.
 
 `SERVER_ASG_NAMES`: List of ASG names where to find target servers (EC2 instances for which HAProxy will load balance traffic). May be a list, separated with comma. If `aws` mode enabled. Default to ` `.
 
-`CONSUL_API_URL`: Consul Address where to find your target servers. If `consul` mode enabled. Default to ` `.
+`CONSUL_API_URL`: Consul address where to find your target servers. If `consul` mode enabled. Default to ` `.
 
 `CONSUL_SERVICE_NAME`: Consul service name where to find your target servers. May be a list, separated with comma. If `consul` mode enabled. Default to ` `.
 
