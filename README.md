@@ -37,7 +37,7 @@ python3 src/main.py --[client|server] (--[debug]) (--[help])
 
 ## Configuration
 
-All configuration can be setted through file or environment variables.
+Parameters can be defined through a config file or environment variables.
 Environment variables will overwrite `conf/env.yaml`.
 
 ### Server Only
