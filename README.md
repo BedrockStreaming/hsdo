@@ -3,6 +3,13 @@ Orchestrate Service Discovery for HAProxy.
 
 We are currently using HSDO to load-balance our VOD traffic, between CDNs and our origins.
 
+CDNs --> NLB -> HAProxy (with HSDO) --> origins
+
+Using an NLB is optional if HAProxy instances are running in a public VPC subnet.
+
+You'll need to take care of updating DNS records if using public HAProxy endpoints (failures, Spot reclaims, etc.)
+
+
 We have tested this platform with tens of HAProxy instances, reaching up to 200Gbps traffic.
 
 We are using Spot instances to run HAProxy with HSDO, using multiple AZs, but by optimizing traffic through AZ (because inter-AZ traffic is extremely expensive).
