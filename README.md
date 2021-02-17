@@ -135,8 +135,8 @@ If needed, ASG name in `CLIENT_ASG_NAMES` can alse be added in fallback HAProxy 
 What dynamodb table should look like :
 
 ```
-resource "aws_dynamodb_table" "service_discovery_orchestrator_table" {
-  name           = "${var.project}-service-discovery-orchestrator"
+resource "aws_dynamodb_table" "haproxy_service_discovery_orchestrator_table" {
+  name           = "haproxy-service-discovery-orchestrator"
   billing_mode   = "PROVISIONED"
   read_capacity  = 20
   write_capacity = 20
@@ -148,13 +148,7 @@ resource "aws_dynamodb_table" "service_discovery_orchestrator_table" {
   }
 
   tags = {
-    Name         = "${var.project}-service-discovery-orchestrator"
-    name         = "${var.project}-service-discovery-orchestrator"
-    project      = var.project
-    team         = var.team
-    product_line = var.product_line
-    tenant       = var.tenant
-    customer     = var.customer
+    name         = "haproxy-service-discovery-orchestrator"
   }
 }
 ```
