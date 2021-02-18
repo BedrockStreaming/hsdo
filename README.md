@@ -3,6 +3,13 @@ Orchestrate Service Discovery for HAProxy.
 
 We are currently using HSDO to load-balance our VOD traffic, between CDNs and our origins.
 
+CDNs --> NLB -> HAProxy (with HSDO) --> origins
+
+Using an NLB is optional if HAProxy instances are running in a public VPC subnet.
+
+You'll need to take care of updating DNS records if using public HAProxy endpoints (failures, Spot reclaims, etc.)
+
+
 We have tested this platform with tens of HAProxy instances, reaching up to 200Gbps traffic.
 
 We are using Spot instances to run HAProxy with HSDO, using multiple AZs, but by optimizing traffic through AZ (because inter-AZ traffic is extremely expensive).
@@ -15,6 +22,8 @@ We are currently running it along with HAProxy 2.2.
 - All HAProxy instances have the same configuration
 
 ![HSDO Simple](doc/hsdo-simple.png)
+
+We have one server, and as much clients as haproxy load balancers.
 
 ## Why HSDO
 
@@ -93,7 +102,7 @@ For example, with :
 backend http-back
 server-template mywebapp 1-10 127.0.0.2:80 check disabled
 ```
-You will have this kind of statistique page : 
+You will have this kind of statistic page : 
 
 ![](doc/backend-servers-list.png)
 
@@ -117,7 +126,7 @@ HSDO Client can be configured to follow specific ASGs that are present in `SERVE
 
 For example, if `SERVER_ASG_NAMES` contains `ASG1,ASG2,ASG3`, `CLIENT_ASG_NAMES` may follow `ASG2`. 
 
-This is usefull if you want to split traffic per AZ for example.
+This is usefull if you want to split traffic per AZ.
 
 ![Dedicated ASG Implementation Example](doc/HSDO_AZ_Limiter.png)
 
@@ -145,7 +154,7 @@ Fallback from default HAProxy backend to fallback HAProxy backend are not handle
 
 ## DynamoDB
 
-What dynamodb table should look like :
+What dynamodb table should look like (terraform code):
 
 ```
 resource "aws_dynamodb_table" "haproxy_service_discovery_orchestrator_table" {
