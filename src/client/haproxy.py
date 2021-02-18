@@ -14,13 +14,13 @@ class HAProxy:
     # Initialization
     ##
     def __init__(self):
-        self.azLimiter = Configuration().get("AZ_LIMITER")
-        self.optAllServersInFallback = Configuration().get("ALL_SERVERS_IN_FALLBACK_BACKEND")
+        self.azLimiter = Configuration().get("CLIENT_DEDICATED_ASG")
+        self.optAllServersInFallback = Configuration().get("CLIENT_ALL_SERVERS_IN_FALLBACK_BACKEND")
         self.socketPath = Configuration().get("CLIENT_HAPROXY_SOCKET_PATH")
         self.backendName = Configuration().get("CLIENT_HAPROXY_BACKEND_NAME")
-        self.fallbackBackendName = Configuration().get("HAPROXY_FALLBACK_BACKEND_NAME")
+        self.fallbackBackendName = Configuration().get("CLIENT_HAPROXY_FALLBACK_BACKEND_NAME")
         self.backendBaseName = Configuration().get("CLIENT_HAPROXY_BACKEND_BASE_NAME")
-        self.fallbackBackendBaseName = Configuration().get("HAPROXY_FALLBACK_BACKEND_BASE_NAME")
+        self.fallbackBackendBaseName = Configuration().get("CLIENT_HAPROXY_FALLBACK_BACKEND_BASE_NAME")
         self.ASG = Configuration().get("CLIENT_ASG_NAMES").split(",")
         self.logger = Logger("HSDO.client.haproxy")
 
@@ -62,7 +62,7 @@ class HAProxy:
             message = "Backend %s/%s not found, please set env CLIENT_HAPROXY_BACKEND_NAME and CLIENT_HAPROXY_BACKEND_BASE_NAME correctly\n" % (self.backendName,self.backendBaseName)
         if self.azLimiter == "true" and not fallbackBackendExists:
             result = False
-            message += "Backend %s/%s not found, please set env HAPROXY_FALLBACK_BACKEND_NAME and HAPROXY_FALLBACK_BACKEND_BASE_NAME correctly" % (self.fallbackBackendName, self.fallbackBackendBaseName)
+            message += "Backend %s/%s not found, please set env CLIENT_HAPROXY_FALLBACK_BACKEND_NAME and CLIENT_HAPROXY_FALLBACK_BACKEND_BASE_NAME correctly" % (self.fallbackBackendName, self.fallbackBackendBaseName)
         return {"result": result, "message": message}
 
     def setServer(self, server):
