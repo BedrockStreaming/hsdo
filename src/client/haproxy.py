@@ -18,6 +18,7 @@ class HAProxy:
         self.optAllServersInFallback = Configuration().get("CLIENT_ALL_SERVERS_IN_FALLBACK_BACKEND")
         self.socketPath = Configuration().get("CLIENT_HAPROXY_SOCKET_PATH")
         self.backendName = Configuration().get("CLIENT_HAPROXY_BACKEND_NAME")
+        self.backendServerPort = str(Configuration().get("CLIENT_HAPROXY_BACKEND_SERVER_PORT"))
         self.fallbackBackendName = Configuration().get("CLIENT_HAPROXY_FALLBACK_BACKEND_NAME")
         self.backendBaseName = Configuration().get("CLIENT_HAPROXY_BACKEND_BASE_NAME")
         self.fallbackBackendBaseName = Configuration().get("CLIENT_HAPROXY_FALLBACK_BACKEND_BASE_NAME")
@@ -101,7 +102,7 @@ class HAProxy:
                     bckndName,
                     bckndbsName + str(server.backendServerID),
                     server.IPAddress,
-                    str(Configuration().get("CLIENT_HAPROXY_BACKEND_SERVER_PORT"),)
+                    self.backendServerPort
                 )
             )
             commands.append(
