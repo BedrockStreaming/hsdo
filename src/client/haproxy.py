@@ -106,7 +106,7 @@ class HAProxy:
                     self.backendServerPort
                 )
             )
-            if self.useProvidedWeights == "true":
+            if self.useProvidedWeights:
                 commands.append(
                     "set server %s/%s weight %s"
                     % (
