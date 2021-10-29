@@ -15,4 +15,3 @@ class ServerModel:
         if self.backendServerID == server.backendServerID and self.serverName == server.serverName and self.IPAddress == server.IPAddress and self.ASG == server.ASG and self.weight == server.weight and self.backendServerStatus == server.backendServerStatus and self.lastWeightUpdate == server.lastWeightUpdate:
             return True
         return False 
- 
