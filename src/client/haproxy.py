@@ -23,6 +23,7 @@ class HAProxy:
         self.backendBaseName = Configuration().get("CLIENT_HAPROXY_BACKEND_BASE_NAME")
         self.fallbackBackendBaseName = Configuration().get("CLIENT_HAPROXY_FALLBACK_BACKEND_BASE_NAME")
         self.ASG = Configuration().get("CLIENT_ASG_NAMES").split(",")
+        self.managedWeights = Configuration().get("CLIENT_USE_MANAGED_WEIGHTS_BY_HSDO")
         self.logger = Logger("HSDO.client.haproxy")
 
     def checkSockConf(self):
@@ -105,14 +106,15 @@ class HAProxy:
                     self.backendServerPort
                 )
             )
-            commands.append(
-                "set server %s/%s weight %s"
-                % (
-                    bckndName,
-                    bckndbsName + str(server.backendServerID),
-                    server.weight,
+            if self.managedWeights == "true":
+                commands.append(
+                    "set server %s/%s weight %s"
+                    % (
+                        bckndName,
+                        bckndbsName + str(server.backendServerID),
+                        server.weight,
+                    )
                 )
-            )
             commands.append(
                 "set server %s/%s state ready"
                 % (
