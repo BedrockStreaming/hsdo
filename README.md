@@ -91,7 +91,7 @@ Configuration that is specific to each HSDO Client, next to HAProxy.
 
 `CLIENT_HAPROXY_BACKEND_SERVER_PORT`: Port of target servers. Default to `80`.
 
-`CLIENT_USE_MANAGED_WEIGHTS_BY_HSDO`: Use weights provide in DynamoDB by HSDO Server. Default to `true`.
+`CLIENT_USE_WEIGHTS_PROVIDED_BY_HSDO`: Use weights provide in DynamoDB by HSDO Server. Default to `true`.
 
 HAProxy default backend configuration can be seen in `haproxy.cfg`:
 ```
