@@ -1,29 +1,26 @@
 # haproxy-service-discovery-orchestrator
-Orchestrate Service Discovery for HAProxy.
+Orchestrate Service Discovery for HAProxy, using the Runtime API.
 
-We are currently using HSDO to load-balance our VOD traffic, between CDNs and our origins.
+No server creation/deletion, only modifications on-the-fly: no file management or reloading.
 
-CDNs --> NLB -> HAProxy (with HSDO) --> origins
+HSDO has a Server/Client architecture:
 
-Using an NLB is optional if HAProxy instances are running in a public VPC subnet.
-
-You'll need to take care of updating DNS records if using public HAProxy endpoints (failures, Spot reclaims, etc.)
-
-
-We have tested this platform with tens of HAProxy instances, reaching up to 200Gbps traffic.
-
-We are using Spot instances to run HAProxy with HSDO, using multiple AZs, but by optimizing traffic through AZ (because inter-AZ traffic is extremely expensive).
-
-We are currently running it along with HAProxy 2.2.
-
-- ASG or Consul is listing available servers
-- HAProxy SDO Server gets servers from ASG, sort them, and save them in DynamoDB
-- HAproxy SDO Clients get sorted servers from DynamoDB and send configuration to HAProxy Runtime API
-- All HAProxy instances have the same configuration
+1. The Server is a single instance that updates Ready servers list from AWS API.
+2. The Server sorts and saves this list inside a DynamoDB table.
+3. The client runs alongside HAProxy and updates the list every X seconds from DynamoDB.
+4. The client compares HAProxy's running configuration (using: `show stat`) to the desired state stored in DynamoDB and applies changes when needed.
 
 ![HSDO Simple](doc/hsdo-simple.png)
 
-We have one server, and as much clients as haproxy load balancers.
+Features list:
+
+* Works with AWS AutoScaling Groups and DynamoDB. Other providers may be supported (Consul has been proof tested but is not prod ready), but must be maintained by the community as we only use AWS right now,
+* No file management or reloads: only API calls,
+* DynamoDB query frequency is configurable,
+* Gradual ramping up of new servers, using HAProxy weight: frequency and weight steps are configurable,
+* The Server can track multiple AWS AutoScalingGroups,
+* The Client can focus to specific ASGs (by using several single-AZ ASGs, it is possible to have a single-AZ topology and avoid prohibitive inter-AZ costs),
+* Fallback backend: the Client can configure a second HAProxy backend with focus on different ASGs as the first backend,
 
 ## Why HSDO
 
