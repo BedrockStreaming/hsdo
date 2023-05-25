@@ -7,7 +7,7 @@ from common.logger import Logger
 from common.server_model import ServerModel
 
 ##
-# Configure HAProxy throught Runtime API
+# Configure HAProxy through Runtime API
 ##
 class HAProxy:
     ##

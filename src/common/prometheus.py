@@ -22,7 +22,7 @@ class SingletonMetaClass(type):
         cls.__new__ = staticmethod(my_new)
 
 ##
-# Export metrics to prometheus
+# Export metrics to Prometheus
 ##
 class Prometheus:
     __metaclass__ = SingletonMetaClass

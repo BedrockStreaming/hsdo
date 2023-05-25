@@ -18,7 +18,7 @@ class SingletonMetaClass(type):
         cls.__new__ = staticmethod(my_new)
 
 ##
-# Get Consul Informations
+# Get Consul information
 ##
 class Configuration:
     __metaclass__ = SingletonMetaClass
@@ -36,7 +36,7 @@ class Configuration:
         if "AWS_DEFAULT_REGION" not in self.__env:
             print("You must set a region AWS_DEFAULT_REGION")
             sys.exit(2)
-        ## AWS_DEFAULT_REGION must be in env var so boto3 could use it
+        ## AWS_DEFAULT_REGION env vars must set so that boto3 can use it
         os.environ["AWS_DEFAULT_REGION"] = self.__env["AWS_DEFAULT_REGION"]
 
     def get(self, key):
