@@ -17,10 +17,20 @@ class HAProxy:
         self.azLimiter = Configuration().get("CLIENT_DEDICATED_ASG")
         self.optAllServersInFallback = Configuration().get("CLIENT_ALL_SERVERS_IN_FALLBACK_BACKEND")
         self.socketPath = Configuration().get("CLIENT_HAPROXY_SOCKET_PATH")
-        self.backendName = Configuration().get("CLIENT_HAPROXY_BACKEND_NAME")
+        self.backendList = Configuration().get("CLIENT_HAPROXY_BACKEND_LIST")
+        ## Example backendList structure:
+        # self.backendList = {
+        #     "backend-web": {
+        #         "baseName": "web-backend",
+        #         "serverPort": "80"
+        #     },
+        #     "backend-api": {
+        #         "baseName": "api-backend",
+        #         "serverPort": "8080"
+        #     }
+        # }
         self.backendServerPort = str(Configuration().get("CLIENT_HAPROXY_BACKEND_SERVER_PORT"))
         self.fallbackBackendName = Configuration().get("CLIENT_HAPROXY_FALLBACK_BACKEND_NAME")
-        self.backendBaseName = Configuration().get("CLIENT_HAPROXY_BACKEND_BASE_NAME")
         self.fallbackBackendBaseName = Configuration().get("CLIENT_HAPROXY_FALLBACK_BACKEND_BASE_NAME")
         self.ASG = Configuration().get("CLIENT_ASG_NAMES").split(",")
         self.logger = Logger("HSDO.client.haproxy")
@@ -45,22 +55,26 @@ class HAProxy:
 
     def backendConfReady(self, stat):
         stat = stat.split("\n")
-        backendExists = False
+        backendsExist = False
+        existingBackends = 0
         fallbackBackendExists = False
         for backend in stat:
             values = backend.split(",")
             ## Example backend line
             ## http_back,mywebapp2,0,0,0,0,,0,0,0,,0,,0,0,0,0,UP,10,1,0,0,1,330587,0,,1,4,2,,0,,2,0,,0,L4OK,,0,0,0,0,0,0,0,,,,,0,0,,,,,-1,,,0,0,0,0,,,,Layer4 check passed,,2,3,4,,,,10.14.34.198:80,,http,,,,,,,,0,0,0,,,0,,0,0,0,0,
-            if len(values) > 80 and values[0] == self.backendName and values[1].startswith(self.backendBaseName):
-                backendExists = True
-            elif self.azLimiter == "true" and len(values) > 80 and values[0] == self.fallbackBackendName and values[1].startswith(self.fallbackBackendBaseName):
-                fallbackBackendExists = True
+            for backend in backendList:
+                if len(values) > 80 and values[0] == backend and values[1].startswith(backendList[backend]["baseName"]):
+                    existingBackends += 1
+                elif self.azLimiter == "true" and len(values) > 80 and values[0] == self.fallbackBackendName and values[1].startswith(self.fallbackBackendBaseName):
+                    fallbackBackendExists = True
+            if existingBackends == len(self.backendList):
+                backendsExist = True
         
         result = True
         message = ""
-        if not backendExists:
+        if not backendsExist:
             result = False
-            message = "Backend %s/%s not found, please set env CLIENT_HAPROXY_BACKEND_NAME and CLIENT_HAPROXY_BACKEND_BASE_NAME correctly\n" % (self.backendName,self.backendBaseName)
+            message = "Backend(s) not found, please set env CLIENT_HAPROXY_BACKEND_LIST correctly\n"
         if self.azLimiter == "true" and not fallbackBackendExists:
             result = False
             message += "Backend %s/%s not found, please set env CLIENT_HAPROXY_FALLBACK_BACKEND_NAME and CLIENT_HAPROXY_FALLBACK_BACKEND_BASE_NAME correctly" % (self.fallbackBackendName, self.fallbackBackendBaseName)
@@ -75,23 +89,23 @@ class HAProxy:
         commands = []
         # If --az-limiter option is used
         if server.ASG not in self.ASG and self.azLimiter == "true":
-            commands.extend(self.__addServerInBackend(server, self.fallbackBackendName, self.fallbackBackendBaseName))
+            commands.extend(self.__addServerInBackend(server, self.fallbackBackendName, self.fallbackBackendBaseName, self.backendServerPort))
         else:
-            commands.extend(self.__addServerInBackend(server, self.backendName, self.backendBaseName))
-            if self.optAllServersInFallback == "true":
-                commands.extend(self.__addServerInBackend(server, self.fallbackBackendName, self.fallbackBackendBaseName))
+            for backend in self.backendList:
+                commands.extend(self.__addServerInBackend(server, backend, self.backendList[backend]["baseName"], self.backendList[backend]["serverPort"]))
+                if self.optAllServersInFallback == "true":
+                    commands.extend(self.__addServerInBackend(server, self.fallbackBackendName, self.fallbackBackendBaseName))
         ## If server is disabled
-        return commands
-        
+        return commands      
 
-    def __addServerInBackend(self, server, bckndName, bckndbsName):
+    def __addServerInBackend(self, server, bckndName, bckndbsName, bckndServerPort):
         commands = []
         if server.IPAddress == "none":
             commands.append(
                 "set server %s/%s state maint"
                 % (
-                    self.backendName,
-                    self.backendBaseName + str(server.backendServerID)
+                    bckndName,
+                    bckndbsName + str(server.backendServerID)
                 )
             )
         ## If server is enabled
@@ -102,7 +116,7 @@ class HAProxy:
                     bckndName,
                     bckndbsName + str(server.backendServerID),
                     server.IPAddress,
-                    self.backendServerPort
+                    bckndServerPort,
                 )
             )
             commands.append(
