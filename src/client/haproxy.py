@@ -62,11 +62,11 @@ class HAProxy:
             values = backend.split(",")
             ## Example backend line
             ## http_back,mywebapp2,0,0,0,0,,0,0,0,,0,,0,0,0,0,UP,10,1,0,0,1,330587,0,,1,4,2,,0,,2,0,,0,L4OK,,0,0,0,0,0,0,0,,,,,0,0,,,,,-1,,,0,0,0,0,,,,Layer4 check passed,,2,3,4,,,,10.14.34.198:80,,http,,,,,,,,0,0,0,,,0,,0,0,0,0,
-            for backend in backendList:
-                if len(values) > 80 and values[0] == backend and values[1].startswith(backendList[backend]["baseName"]):
+            for k,v in self.backendList.items():
+                if values[0] == k and values[1].startswith(v["baseName"]):
                     existingBackends += 1
-                elif self.azLimiter == "true" and len(values) > 80 and values[0] == self.fallbackBackendName and values[1].startswith(self.fallbackBackendBaseName):
-                    fallbackBackendExists = True
+            if self.azLimiter == "true" and len(values) > 80 and values[0] == self.fallbackBackendName and values[1].startswith(self.fallbackBackendBaseName):
+                fallbackBackendExists = True
             if existingBackends == len(self.backendList):
                 backendsExist = True
         
@@ -86,17 +86,16 @@ class HAProxy:
             self.sendHaproxyCommand(command)
 
     def prepareServer(self, server):
-        commands = []
         # If --az-limiter option is used
         if server.ASG not in self.ASG and self.azLimiter == "true":
-            commands.extend(self.__addServerInBackend(server, self.fallbackBackendName, self.fallbackBackendBaseName, self.backendServerPort))
-        else:
-            for backend in self.backendList:
-                commands.extend(self.__addServerInBackend(server, backend, self.backendList[backend]["baseName"], self.backendList[backend]["serverPort"]))
-                if self.optAllServersInFallback == "true":
-                    commands.extend(self.__addServerInBackend(server, self.fallbackBackendName, self.fallbackBackendBaseName))
-        ## If server is disabled
-        return commands      
+            return self.__addServerInBackend(server, self.fallbackBackendName, self.fallbackBackendBaseName, self.backendServerPort)
+        # Read backend list
+        commands = []
+        for k,v in self.backendList.items():
+            commands.extend(self.__addServerInBackend(server, k, v["baseName"], v["serverPort"]))
+            if self.optAllServersInFallback == "true":
+                commands.extend(self.__addServerInBackend(server, self.fallbackBackendName, self.fallbackBackendBaseName, self.backendServerPort))
+        return commands
 
     def __addServerInBackend(self, server, bckndName, bckndbsName, bckndServerPort):
         commands = []
