@@ -67,7 +67,7 @@ class DynamoDB:
     def fillServer(self, item):
         s = ServerModel()
         s.backendServerID = int(item["BackendServerID"])
-        # if asg column isn't existing (problem occured when migrating from v2 to v3)
+        # if ASG column does not exist (problem occured when migrating from v2 to v3)
         if "ASG" in item:
             s.ASG = item["ASG"]
         s.IPAddress = item["IPAddress"]

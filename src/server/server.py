@@ -74,7 +74,7 @@ class Server(threading.Thread):
                 self.logger.error("HAProxy backend size is lower than registered servers in dynamoDB. Please correct it by hand.")
                 sys.exit(2)
 
-            # Remove servers that does not exists anymore
+            # Remove servers that do not exist anymore
             self.removeUnexistingServers(dynamodbServers, sourceServers, oldDynamodbServers)
 
             # Do not keep track of already registered servers
@@ -92,7 +92,7 @@ class Server(threading.Thread):
                     Prometheus().serverWeightMetric(server)
                 
                 match = False
-                #Update only modified servers
+                # Update only modified servers
                 for oldServer in oldDynamodbServers:
                     if server.equals(oldServer):
                         match = True
@@ -138,7 +138,7 @@ class Server(threading.Thread):
                 sourceServersToAdd.append(sServer)
         return sourceServersToAdd
 
-    # Remove servers that does not exists anymore
+    # Remove servers that do not exist anymore
     def removeUnexistingServers(self, dynamodbServers : List[ServerModel], sourceServers : List[ServerModel], oldDynamodbServers : List[ServerModel]):
         for oldServer in oldDynamodbServers:
             match = False

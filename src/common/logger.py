@@ -55,7 +55,7 @@ class Logger:
         self.logger.info("\033[0;0m%s\033[0;0m" % str(message))
 
     ##
-    # Error message
+    # Error messages
     ##
     def error(self, message):
         self.logger.error("\033[1;31m%s\033[0;0m" % str(message))

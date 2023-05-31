@@ -32,12 +32,12 @@ class Client(threading.Thread):
             oldDynamodbServers = dynamodbServers
             dynamodbServers = self.dynamodb.listServers()
 
-            # If dynamodb server is removed then remove metric
+            # Remove metric if dynamodb server is removed
             for oldServer in oldDynamodbServers:
                 if not self.isServerInList(oldServer, dynamodbServers):
                     self.logger.info("Removed : " + oldServer.toString())
                     Prometheus().removeMetric(oldServer)
-            # If dynamodb server is added then display metric
+            # Display metric if dynamodb server is added
             for dServer in dynamodbServers:
                 if not self.isServerInList(dServer, oldDynamodbServers) and dServer.backendServerStatus != "disabled":
                     self.logger.info("Added : " + dServer.toString())

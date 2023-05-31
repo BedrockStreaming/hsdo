@@ -1,5 +1,5 @@
 # haproxy-service-discovery-orchestrator
-Orchestrate Service Discovery for HAProxy, using the Runtime API.
+Orchestrated Service Discovery for HAProxy, using the Runtime API.
 
 No server creation/deletion, only modifications on-the-fly: no file management or reloading.
 
@@ -82,9 +82,7 @@ Configuration that is specific to each HSDO Client, next to HAProxy.
 
 `CLIENT_HAPROXY_SOCKET_PATH`: HAProxy socket to use [Runtime API](https://cbonte.github.io/haproxy-dconv/2.2/management.html#9.3). Default to `/var/run/haproxy/admin.sock`.
 
-`CLIENT_HAPROXY_BACKEND_NAME`: HAProxy default backend name. Default to ` `.
-
-`CLIENT_HAPROXY_BACKEND_BASE_NAME`: HAProxy default backend base name for server template. Default to ` `.
+`CLIENT_HAPROXY_BACKEND_LIST`: HAProxy backend list. Default to ` `.
 
 `CLIENT_HAPROXY_BACKEND_SERVER_PORT`: Port of target servers. Default to `80`.
 
@@ -111,11 +109,11 @@ You will have this kind of statistic page :
 
 `DEBUG`: To enable debug log. Default to `false`.
 
-`DYNAMODB_TABLE_NAME`: Name of dynamodb table. Default to ` `.
+`DYNAMODB_TABLE_NAME`: Name of Dynamodb table. Default to ` `.
 
-`AWS_DEFAULT_REGION`: default region needed for dynamodb access. Default to ` `.
+`AWS_DEFAULT_REGION`: default region needed for Dynamodb access. Default to ` `.
 
-`EXPORTER_PORT`: port for prometheus exporter. Default to `6789`
+`EXPORTER_PORT`: port for Prometheus exporter. Default to `6789`
 
 ## Dedicated ASG Configuration (AWS Only)
 
